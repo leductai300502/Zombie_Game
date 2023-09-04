@@ -72,6 +72,9 @@ class  Game(object):
         self.update_animation = False
         self.random_hole = 0
         self.zombie_alive = True
+        self.endZombieFlag = False
+        self.endFlag = False
+        self.endCount = 19
 
         #Running Game Setting
         self.run = True
@@ -106,12 +109,16 @@ class  Game(object):
     ##################################################################################
     def updateZombie(self):
 
-        if self.walkCount + 1 <= 18:
+        if self.walkCount + 1 <= 18 and self.endFlag == False:
             self.win.blit(self.zombieImage[self.walkCount//6],Constants.LIST_HOLE[self.random_hole])
             self.walkCount +=1 
         else:
-            if self.isHit == False:
+            if self.isHit == False and self.endFlag == False:
                 self.win.blit(self.zombieImage[2],Constants.LIST_HOLE[self.random_hole])
+                if self.count_Timer >= 30:
+                    self.endZombieFlag = True
+                    self.endFlag = True
+            
     ##################################################################################
     def levelUp(self):
         print("hehe")                
@@ -121,6 +128,18 @@ class  Game(object):
         if self.count_Timer > self.max:
             self.Timer_Flag = True
             self.count_Timer = 0
+
+    ##################################################################################
+    def endZombie(self):
+        if self.walkCount <= 19 and self.walkCount > 0:
+            print(self.walkCount)
+            self.win.blit(self.zombieImage[self.walkCount//7],Constants.LIST_HOLE[self.random_hole])
+            self.walkCount -=1
+            self.count_Timer -= 1 
+        else:
+            self.endZombieFlag = False
+            self.endFlag = False
+            self.count_Timer = 60
     ##################################################################################
     def generateZombie(self):       
         if self.zombie_alive == True:
@@ -129,7 +148,7 @@ class  Game(object):
                 self.stop = True
                 self.update_animation = False
                 self.fail_count = 0
-        
+
         self.random_hole = random.randint(0,7)
         self.image_rect.center = Constants.LIST_HOLE[self.random_hole]
         self.walkCount = 0
@@ -144,6 +163,8 @@ class  Game(object):
             self.count_Timer -= 1
         else:
             self.isHit = False
+            self.endFlag = False
+            # self.endZombieFlag = False
             self.count_Timer = 60
     ##################################################################################
     def endScreen(self):
@@ -215,8 +236,8 @@ class  Game(object):
             pygame.display.update()
         #End Game Start Menu 
         #####################################################################
-        ##                                                                 ##
-        ##                                                                 ##
+        ##                        PLAY GAME                                ##
+        ##                          !!!                                    ##
         #####################################################################
         #Before Game Play
         while self.run:
@@ -236,10 +257,12 @@ class  Game(object):
                         self.miss = 0
                         
                     if self.image_rect.collidepoint(mouse_pos) and self.isHit == False:
-                        if self.max > 15:
+                        if self.max > 25:
                             self.max -= 1
                         if self.count_Timer != 0:
                             self.isHit = True
+                            self.endFlag = True
+                            self.endZombieFlag = False
                             self.hits += 1
                             self.zombie_alive = False
                             self.sound.playHitSound()
@@ -253,13 +276,18 @@ class  Game(object):
                 if self.Timer_Flag == True:
                     self.generateZombie()
 
+                #Handle Update New Animation Zombie
+                if self.update_animation == True :
+                    self.updateZombie()
+
                 #Handle Hit Zombie
                 if self.isHit == True:
                     self.hitZombie()
 
-                #Handle Update New Animation Zombie
-                if self.update_animation:
-                    self.updateZombie()
+                #Handle End Zombie
+                if self.endZombieFlag == True:
+                    self.endZombie()
+
                 
                 #Timer Of Game
                 self.Timer()
