@@ -132,7 +132,6 @@ class  Game(object):
     ##################################################################################
     def endZombie(self):
         if self.walkCount <= 19 and self.walkCount > 0:
-            print(self.walkCount)
             self.win.blit(self.zombieImage[self.walkCount//7],Constants.LIST_HOLE[self.random_hole])
             self.walkCount -=1
             self.count_Timer -= 1 
@@ -208,17 +207,23 @@ class  Game(object):
         begin = True
         button0 = pygame.image.load(Constants.IMAGE_BUTTON_0)
         button0_hover = pygame.image.load(Constants.IMAGE_BUTTON_0_HOVER)
+        # description = pygame.image.load(Constants.IMAGE_DESCRIPTION)
         
         button0_hover_rect = button0.get_rect()
-        button0_hover_rect.center = (527,352)
+        button0_hover_rect.center = (0,456)
+        
 
         while begin:
-            self.win.blit(self.start,(0,0))
-            self.win.blit(button0,(527,352))
+            resized_image = pygame.transform.scale(self.start, (800, 600))
+            resized_image_button = pygame.transform.scale(button0, (250, 400))
+            resized_image_button_hover = pygame.transform.scale(button0_hover, (250, 400))
+            self.win.blit(resized_image,(0,0))
+            self.win.blit(resized_image_button,(0,300))
+            # self.win.blit(description,(0,454))
 
             mouseX, mouseY = pygame.mouse.get_pos()
-            if mouseX >= 527 and mouseX <= 794 and mouseY >= 352 and mouseY <= 406:
-                self.win.blit(button0_hover, (527, 352))
+            if mouseX >= 0 and mouseX <= 120 and mouseY >= 456 and mouseY <= 576:
+                self.win.blit(resized_image_button_hover, (0, 300))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

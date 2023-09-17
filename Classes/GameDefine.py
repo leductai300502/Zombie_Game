@@ -52,9 +52,10 @@ class TextConstants:
 class ImageConstants:
 	IMAGE = "./Resources/images/"	# Folder chứa ảnh
 	ICON = IMAGE + "thor.png"
-	IMAGE_START = IMAGE + "start.png"
-	IMAGE_BUTTON_0 = IMAGE + "button0.png"
-	IMAGE_BUTTON_0_HOVER = IMAGE + "button0_hover.png"
+	IMAGE_START = IMAGE + "start_game.png"
+	IMAGE_DESCRIPTION = IMAGE + "des1.png"
+	IMAGE_BUTTON_0 = IMAGE + "button_start.png"
+	IMAGE_BUTTON_0_HOVER = IMAGE + "button_start_hover.png"
 	IMAGE_BG = IMAGE + "background.png"
 	IMAGE_GAMEOVER = IMAGE + "gameover.png"
 	IMAGE_BUTTON_1 = IMAGE + "button1.png"
